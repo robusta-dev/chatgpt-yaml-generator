@@ -16,8 +16,7 @@
 This plugin gives ChatGPT up-to-date knowledge of every Kubernetes resource and their complete specifications. It lets ChatGPT query the [Kubernetes OpenAPI (swagger) schema](https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json) to fetch resource definitions. Additionally, it provides ChatGPT with schema validation capabilities.
 
 <a href="https://www.loom.com/share/ff472bbdb9494ef4aca1c3f23dee8742">
-    <p>Generating Kubernetes YAMLs with a ChatGPT Plugin - Watch Video</p>
-    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/ff472bbdb9494ef4aca1c3f23dee8742-with-play.gif">
+    <img src="https://cdn.loom.com/sessions/thumbnails/ff472bbdb9494ef4aca1c3f23dee8742-with-play.gif">
   </a>
   
 # Key Features
