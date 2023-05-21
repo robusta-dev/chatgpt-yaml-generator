@@ -1,9 +1,9 @@
 {
     "schema_version": "v1",
-    "name_for_human": "TODO Plugin (no auth)",
-    "name_for_model": "todo",
-    "description_for_human": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
-    "description_for_model": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
+    "name_for_human": "Kubernetes YAML Generator",
+    "name_for_model": "Kubernetes_YAML_Generator_Plugin",
+    "description_for_human": "Plugin for generating Kubernetes YAML manifests, with precise schemas",
+    "description_for_model": "Plugin for generating Kubernetes YAML manifests, based on up-to-date OpenAPI schemas for Kubernetes resources, past the ChatGPT knowledge cut-off.",
     "auth": {
       "type": "none"
     },

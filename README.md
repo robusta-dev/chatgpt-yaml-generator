@@ -1,6 +1,13 @@
-# ChatGPT plugins quickstart
+# ChatGPT Kubernetes Generation Plugin
 
-Get a todo list ChatGPT plugin up and running in under 5 minutes using Python. If you do not already have plugin developer access, please [join the waitlist](https://openai.com/waitlist/plugins).
+This plugin gives ChatGPT up-to-date knowledge of every Kubernetes resource and their full specification. It lets ChatGPT query the [official Kubernetes OpenAPI (swagger) schema](https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json) to lookup resources and see how to define them. It also provides ChatGPT with a schema validation function for every Kubernetes resource.
+
+# Key Features
+1. **Schema Lookup:** The `GET /schemas/search/{resourceName}` endpoint retrieves fully-namespaced names for Kubernetes resources. For instance, a search for 'Container' will yield 'io.k8s.api.core.v1.Container'.
+
+2. **Schema Retrieval:** The `GET /schemas/resource/{resourceType}` endpoint fetches the latest OpenAPI schemas for Kubernetes resources using fully-namespaced resource names.
+
+3. **YAML Validation:** The `POST /validate-yaml` endpoint validates generated Kubernetes YAML manifests, guaranteeing their accuracy.
 
 ## Setup
 

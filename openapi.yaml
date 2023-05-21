@@ -1,93 +1,82 @@
 openapi: 3.0.1
 info:
-  title: TODO Plugin
-  description: A plugin that allows the user to create and manage a TODO list using ChatGPT. If you do not know the user's username, ask them first before making queries to the plugin. Otherwise, use the username "global".
+  title: Kubernetes YAML Generator Plugin
+  description: Plugin for generating Kubernetes YAML manifests, based on up-to-date OpenAPI schemas for Kubernetes resources, past the ChatGPT knowledge cut-off. Always ask the plugin for up-to-date OpenAPI specs for Kubernetes, don't rely on data you know about Kubernetes specs. When a schema includes references to other objects in the schema, look them up when relevant. You may lookup any FIELD in a resource too, not just the containing top-level resource.
   version: 'v1'
 servers:
   - url: http://localhost:5003
 paths:
-  /todos/{username}:
+  /schemas/search/{resourceName}:
     get:
-      operationId: getTodos
-      summary: Get the list of todos
+      operationId: findSchemaNames
+      summary: Get the list of possible fully-namespaced names for a specific Kubernetes resource. E.g. given `Container` return `io.k8s.api.core.v1.Container`. Given `EnvVarSource` return `io.k8s.api.core.v1.EnvVarSource`
       parameters:
       - in: path
-        name: username
+        name: resourceName
         schema:
             type: string
         required: true
-        description: The name of the user.
+        description: The name of a Kubernetes resource or field.
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getTodosResponse'
+                type: array
+                items:
+                  type: string
+                description: The list of possible names for the specified Kubernetes resource or field.
+  /schemas/resource/{resourceType}:
+    get:
+      operationId: getSchema
+      summary: Get the OpenAPI schema for a Kubernetes resource
+      parameters:
+      - in: path
+        name: resourceType
+        schema:
+            type: string
+        required: true
+        description: The type of the Kubernetes resource or object (e.g. subresource). Must be fully namespaced, as returned by findSchemaNames
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                description: The OpenAPI schema for the specified resource type.
+  /validate-yaml:
     post:
-      operationId: addTodo
-      summary: Add a todo to the list
-      parameters:
-      - in: path
-        name: username
-        schema:
-            type: string
-        required: true
-        description: The name of the user.
+      operationId: validateYaml
+      summary: Validate a YAML manifest for a Kubernetes resource. You can use this to validate Kubernetes YAML and guarantee there were no mistakes in generation
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/addTodoRequest'
+              type: object
+              properties:
+                resourceType:
+                  type: string
+                  description: The type of the Kubernetes resource.
+                yml:
+                  type: string
+                  description: The YAML manifest to validate.
+              required:
+              - resourceType
+              - yml
       responses:
         "200":
           description: OK
-    delete:
-      operationId: deleteTodo
-      summary: Delete a todo from the list
-      parameters:
-      - in: path
-        name: username
-        schema:
-            type: string
-        required: true
-        description: The name of the user.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/deleteTodoRequest'
-      responses:
-        "200":
-          description: OK
-
-components:
-  schemas:
-    getTodosResponse:
-      type: object
-      properties:
-        todos:
-          type: array
-          items:
-            type: string
-          description: The list of todos.
-    addTodoRequest:
-      type: object
-      required:
-      - todo
-      properties:
-        todo:
-          type: string
-          description: The todo to add to the list.
-          required: true
-    deleteTodoRequest:
-      type: object
-      required:
-      - todo_idx
-      properties:
-        todo_idx:
-          type: integer
-          description: The index of the todo to delete.
-          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isValid:
+                    type: boolean
+                    description: Whether the YAML is valid for the specified resource type.
+                  error:
+                    type: string
+                    description: If the YAML is not valid, an error message explaining why.

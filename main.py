@@ -1,4 +1,7 @@
 import json
+import requests
+import yaml
+from jsonschema import validate, ValidationError
 
 import quart
 import quart_cors
@@ -6,29 +9,59 @@ from quart import request
 
 app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
 
-# Keep track of todo's. Does not persist if Python session is restarted.
-_TODOS = {}
+# Store the schema here after fetching
+_SCHEMA = None
 
-@app.post("/todos/<string:username>")
-async def add_todo(username):
-    request = await quart.request.get_json(force=True)
-    if username not in _TODOS:
-        _TODOS[username] = []
-    _TODOS[username].append(request["todo"])
-    return quart.Response(response='OK', status=200)
+def fetch_schema_from_url():
+    response = requests.get('https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json')
+    return response.json()
 
-@app.get("/todos/<string:username>")
-async def get_todos(username):
-    return quart.Response(response=json.dumps(_TODOS.get(username, [])), status=200)
+def fetch_official_kubernetes_schema():
+    global _SCHEMA
+    if _SCHEMA is None:
+        _SCHEMA = fetch_schema_from_url()
+    return _SCHEMA
 
-@app.delete("/todos/<string:username>")
-async def delete_todo(username):
-    request = await quart.request.get_json(force=True)
-    todo_idx = request["todo_idx"]
-    # fail silently, it's a simple plugin
-    if 0 <= todo_idx < len(_TODOS[username]):
-        _TODOS[username].pop(todo_idx)
-    return quart.Response(response='OK', status=200)
+def fetch_resource_names(resourceName):
+    schema = fetch_official_kubernetes_schema()
+    resourceNames = [k for k in schema['definitions'].keys() if resourceName.lower() in k.lower()]
+    return resourceNames
+
+def fetch_schema_for_resource(resourceType):
+    schema = fetch_official_kubernetes_schema()
+    if resourceType in schema['definitions']:
+        return schema['definitions'][resourceType]
+    else:
+        return None
+
+def validate_yaml(resourceType, yml):
+    schema_for_resource = fetch_schema_for_resource(resourceType)
+    if schema_for_resource is None:
+        return {"isValid": False, "error": "Unknown resource type"}
+    try:
+        data = yaml.safe_load(yml)
+        validate(instance=data, schema=schema_for_resource)
+        return {"isValid": True, "error": None}
+    except ValidationError as e:
+        return {"isValid": False, "error": str(e)}
+
+@app.get("/schemas/search/<string:resourceName>")
+async def find_schema_names(resourceName):
+    resourceNames = fetch_resource_names(resourceName)
+    return quart.Response(response=json.dumps(resourceNames), status=200)
+
+@app.get("/schemas/resource/<string:resourceType>")
+async def get_schema(resourceType):
+    schema = fetch_schema_for_resource(resourceType)
+    return quart.Response(response=json.dumps(schema), status=200)
+
+@app.post("/validate-yaml")
+async def validate_yaml_route():
+    request_data = await quart.request.get_json(force=True)
+    resourceType = request_data["resourceType"]
+    yaml = request_data["yaml"]
+    result = validate_yaml(resourceType, yaml)
+    return quart.Response(response=json.dumps(result), status=200)
 
 @app.get("/logo.png")
 async def plugin_logo():
