@@ -1,8 +1,10 @@
 <div id="top"></div>
 
 <div align="center">
+  <img src="./screenshot.png" />
+
   <h2>ChatGPT Kubernetes YAML Plugin by <a href="https://home.robusta.dev/">Robusta</a></h2>
-    <h3>A ChatGPT plugin to generate accurate manifests</h3>
+    <h3>A ChatGPT plugin to generate accurate Kubernetes manifests</h3>
 
   [![twitter robusta](https://img.shields.io/twitter/follow/RobustaDev?logo=twitter&color=blue&label=@RobustaDev&style=flat-square)](https://twitter.com/RobustaDev)
   [![slack robusta](https://img.shields.io/badge/Slack-Join-4A154B?style=flat-square&logo=slack&logoColor=white)](https://bit.ly/robusta-slack)
@@ -11,7 +13,7 @@
 
 </div>
 
-This plugin gives ChatGPT up-to-date knowledge of every Kubernetes resource and their full specification. It lets ChatGPT query the [official Kubernetes OpenAPI (swagger) schema](https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json) to lookup resources and see how to define them. It also provides ChatGPT with a schema validation function for every Kubernetes resource.
+This plugin gives ChatGPT up-to-date knowledge of every Kubernetes resource and their complete specifications. It lets ChatGPT query the [Kubernetes OpenAPI (swagger) schema](https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json) to fetch resource definitions. Additionally, it provides ChatGPT with schema validation capabilities.
 
 # Key Features
 1. **Schema Lookup:** The `GET /schemas/search/{resourceName}` endpoint retrieves fully-namespaced names for Kubernetes resources. For instance, a search for 'Container' will yield 'io.k8s.api.core.v1.Container'.

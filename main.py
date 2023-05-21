@@ -63,9 +63,9 @@ async def validate_yaml_route():
     result = validate_yaml(resourceType, yaml)
     return quart.Response(response=json.dumps(result), status=200)
 
-@app.get("/logo.png")
+@app.get("/kubernetes-logo.png")
 async def plugin_logo():
-    filename = 'logo.png'
+    filename = 'kubernetes-logo.png'
     return await quart.send_file(filename, mimetype='image/png')
 
 @app.get("/.well-known/ai-plugin.json")
