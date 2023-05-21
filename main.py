@@ -35,12 +35,9 @@ def fetch_schema_for_resource(resourceType):
         return None
 
 def validate_yaml(resourceType, yml):
-    schema_for_resource = fetch_schema_for_resource(resourceType)
-    if schema_for_resource is None:
-        return {"isValid": False, "error": "Unknown resource type"}
     try:
         data = yaml.safe_load(yml)
-        validate(instance=data, schema=schema_for_resource)
+        validate(instance=data, schema=fetch_official_kubernetes_schema())
         return {"isValid": True, "error": None}
     except ValidationError as e:
         return {"isValid": False, "error": str(e)}
@@ -59,7 +56,7 @@ async def get_schema(resourceType):
 async def validate_yaml_route():
     request_data = await quart.request.get_json(force=True)
     resourceType = request_data["resourceType"]
-    yaml = request_data["yaml"]
+    yaml = request_data["yml"]
     result = validate_yaml(resourceType, yaml)
     return quart.Response(response=json.dumps(result), status=200)
 
