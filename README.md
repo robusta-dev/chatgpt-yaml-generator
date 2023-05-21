@@ -15,6 +15,8 @@
 
 This plugin gives ChatGPT up-to-date knowledge of every Kubernetes resource and their complete specifications. It lets ChatGPT query the [Kubernetes OpenAPI (swagger) schema](https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json) to fetch resource definitions. Additionally, it provides ChatGPT with schema validation capabilities.
 
+<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/ff472bbdb9494ef4aca1c3f23dee8742" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+
 # Key Features
 1. **Schema Lookup:** The `GET /schemas/search/{resourceName}` endpoint retrieves fully-namespaced names for Kubernetes resources. For instance, a search for 'Container' will yield 'io.k8s.api.core.v1.Container'.
 
