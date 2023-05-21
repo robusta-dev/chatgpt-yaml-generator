@@ -3,7 +3,7 @@
 <div align="center">
   <p>
     <a href="https://home.robusta.dev/" target="_blank">
-        <img src="./logos/Robusta_readme.png" alt="Robusta.dev">
+        <img src="./robusta-logo.png" alt="Robusta.dev">
     </a>
 </p>
   <h2>ChatGPT Kubernetes YAML Plugin</h2>
