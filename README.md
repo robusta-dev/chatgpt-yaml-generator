@@ -1,7 +1,7 @@
 <div id="top"></div>
 
 <div align="center">
-  <h2>ChatGPT Kubernetes YAML Plugin by [Robusta](https://home.robusta.dev/)</h2>
+  <h2>ChatGPT Kubernetes YAML Plugin by <a href="https://home.robusta.dev/">Robusta</a></h2>
     <h3>A ChatGPT plugin to generate accurate manifests</h3>
 
   [![twitter robusta](https://img.shields.io/twitter/follow/RobustaDev?logo=twitter&color=blue&label=@RobustaDev&style=flat-square)](https://twitter.com/RobustaDev)
