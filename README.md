@@ -48,7 +48,7 @@ Once the local server is running:
 4. Select "Develop your own plugin" (ChatGPT Plus is required right now)
 5. Enter in `localhost:5003` since this is the URL the server is running on locally, then select "Find manifest file".
 
-The plugin should now be installed and enabled! What the video above for ideas on using the plugin.
+The plugin should now be installed and enabled! Watch the video above for ideas on using the plugin.
 
 ## Getting help
 
